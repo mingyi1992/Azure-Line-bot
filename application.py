@@ -7,6 +7,7 @@ from linebot.models import (
     TextMessage,
     TextSendMessage,
 )
+import json
 
 app = Flask(__name__)
 
