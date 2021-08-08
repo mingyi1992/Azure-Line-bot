@@ -47,7 +47,7 @@ def handle_message(event):
             [FlexSendMessage(alt_text="Report", contents=bubble)]
         )   
     else:
-        url_dict{
+        url_dict = {
             "GOOGLE":"https://www.google.com.tw/?hl=zh_TW",
             "HELP":"https://developers.line.biz/zh-hant/docs/messaging-api/"}
 # 將要發出去的文字變成TextSendMessage
