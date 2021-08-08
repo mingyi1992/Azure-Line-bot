@@ -47,3 +47,16 @@ def handle_message(event):
         message = TextSendMessage(text=event.message.text)
 # 回覆訊息
     LINE_BOT.reply_message(event.reply_token, message)
+
+with open("./coffee.json", "r") as f_r:
+   bubble = json.load(f_r)
+f_r.close()
+# 依情況更動 components
+bubble["body"]["contents"][0]["contents"][0]["text"] = output
+bubble["header"]["contents"][0]["contents"][0]["url"] = link
+LINE_BOT.reply_message(
+   event.reply_token, 
+   [
+     FlexSendMessage(alt_text="Report", contents=bubble)
+     ]
+)
