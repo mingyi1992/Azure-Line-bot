@@ -2,7 +2,11 @@ from flask import Flask, request, abort
 from linebot import LineBotApi, WebhookHandler
 from linebot.exceptions import InvalidSignatureError
 import os
-
+from linebot.models import (
+    MessageEvent,
+    TextMessage,
+    TextSendMessage,
+)
 
 app = Flask(__name__)
 
@@ -29,4 +33,17 @@ def callback():
         print("Check the channel secret/access token.")
         abort(400)
     return "OK"
-
+# message 可以針對收到的訊息種類
+@HANDLER.add(MessageEvent, message=TextMessage)
+def handle_message(event):
+    url_dict = {
+      "google":"https://www.google.com.tw/?hl=zh_TW", 
+      "HELP":"https://developers.line.biz/zh-hant/docs/messaging-api/"}
+# 將要發出去的文字變成TextSendMessage
+    try:
+        url = url_dict[event.message.text.upper()]
+        message = TextSendMessage(text=url)
+    except:
+        message = TextSendMessage(text=event.message.text)
+# 回覆訊息
+    LINE_BOT.reply_message(event.reply_token, message)
