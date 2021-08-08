@@ -33,11 +33,12 @@ def callback():
         print("Check the channel secret/access token.")
         abort(400)
     return "OK"
+
 # message 可以針對收到的訊息種類
 @HANDLER.add(MessageEvent, message=TextMessage)
 def handle_message(event):
     if event.message.text.upper()=='COFFEE':
-        with open("./coffee.json", "r") as f_r:
+        with open("coffee.json", "r") as f_r:
             bubble = json.load(f_r)
         f_r.close()
     # 依情況更動 components
