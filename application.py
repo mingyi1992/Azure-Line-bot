@@ -6,6 +6,7 @@ from linebot.models import (
     MessageEvent,
     TextMessage,
     TextSendMessage,
+    FlexSendMessage
 )
 import json
 
