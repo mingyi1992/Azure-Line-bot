@@ -19,6 +19,7 @@ from azure.cognitiveservices.vision.face.models import TrainingStatusType, Perso
 from azure.cognitiveservices.vision.computervision import ComputerVisionClient
 from azure.cognitiveservices.vision.computervision.models import OperationStatusCodes,VisualFeatureTypes
 from imgur_python import Imgur
+from datetime import datetime, timezone, timedelta
 
 
 app = Flask(__name__)
