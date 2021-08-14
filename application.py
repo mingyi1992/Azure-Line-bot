@@ -58,7 +58,7 @@ def hello():
 
 @app.route("/callback", methods=["POST"])
 def callback():
-    X-Line-Signature: # 數位簽章
+    # X-Line-Signature:  數位簽章
     signature = request.headers["X-Line-Signature"]
     print(signature)
     body = request.get_data(as_text=True)
