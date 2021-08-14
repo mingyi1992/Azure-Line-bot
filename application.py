@@ -24,7 +24,7 @@ from msrest.authentication import CognitiveServicesCredentials
 from azure.cognitiveservices.vision.face.models import TrainingStatusType, Person
 from azure.cognitiveservices.vision.computervision import ComputerVisionClient
 from azure.cognitiveservices.vision.computervision.models import OperationStatusCodes
-
+from msrest.authentication import CognitiveServicesCredentials
 
 
 app = Flask(__name__)
