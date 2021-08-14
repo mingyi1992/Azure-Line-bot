@@ -5,6 +5,7 @@ import os
 from linebot.models import (
     MessageEvent,
     TextMessage,
+    ImageMessage,
     TextSendMessage,
     FlexSendMessage
 )
