@@ -157,6 +157,15 @@ def azure_object_detection(url, filename):
     os.remove(filename)
     return link
 
+def azure_describe(url):
+    description_results = CV_CLIENT.describe_image(url)
+    output = ""
+    for caption in description_results.captions:
+        output += "'{}' with confidence {:.2f}% \n".format(
+            caption.text, caption.confidence * 100
+        )
+    return output
+
 
 @HANDLER.add(MessageEvent, message=ImageMessage)
 def handle_content_message(event):
