@@ -70,6 +70,65 @@ def callback():
         abort(400)
     return "OK"
 
+def azure_face_recognition(filename):
+    img = open(filename, "r+b")
+    detected_face = FACE_CLIENT.face.detect_with_stream(
+        img, detection_model="detection_01"
+    )
+    # 多於一張臉的情況
+    if len(detected_face) != 1:
+        return ""
+    results = FACE_CLIENT.face.identify(
+      [detected_face[0].face_id], PERSON_GROUP_ID)
+    # 沒有結果的情況
+    if len(results) == 0:
+        return "unknown"
+    result = results[0].as_dict()
+    # 找不到相像的人
+    if len(result["candidates"]) == 0:
+        return "unknown"
+    # 雖然有類似的人，但信心程度太低
+    if result["candidates"][0]["confidence"] < 0.6:
+        return "unknown"
+    person = FACE_CLIENT.person_group_person.get(
+        PERSON_GROUP_ID, result["candidates"][0]["person_id"]
+    )
+    return person.name
+
+@HANDLER.add(MessageEvent, message=ImageMessage)
+def handle_content_message(event):
+    # 先把傳來的照片存檔
+    filename = "{}.jpg".format(event.message.id)
+    message_content = LINE_BOT.get_message_content(
+      event.message.id)
+    with open(filename, "wb") as f_w:
+        for chunk in message_content.iter_content():
+            f_w.write(chunk)
+    f_w.close()
+
+    # 將取得照片的網路連結
+    image = IMGUR_CLIENT.image_upload(filename, "", "")
+    link = image["response"]["data"]["link"]
+    name = azure_face_recognition(filename)
+    if name != "": # 如果只有一張人臉，輸出人臉辨識結果
+        now = datetime.now(timezone(timedelta(hours=8))).\
+        strftime("%Y-%m-%d %H:%M") # 注意時區
+        output = "{0}, {1}".format(name, now)
+    else:
+        plate = azure_ocr(link)
+        link_ob = azure_object_detection(link, filename)
+# 分別影像連結和偵測結果放到Flex Message
+    with open("detect_result.json", "r") as f_r:
+        bubble = json.load(f_r)
+    f_r.close()
+    bubble["body"]["contents"][0]["contents"][0]["contents"][0]["text"] = output
+    bubble["header"]["contents"][0]["contents"][0]["contents"][0]["url"] = link
+    LINE_BOT.reply_message(
+        event.reply_token, 
+        [FlexSendMessage(alt_text="Report", contents=bubble)]
+    )
+
+
 # message 可以針對收到的訊息種類
 @HANDLER.add(MessageEvent, message=TextMessage)
 def handle_message(event):
