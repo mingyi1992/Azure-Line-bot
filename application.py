@@ -179,14 +179,14 @@ def handle_content_message(event):
         output = "{0}, {1}".format(name, now)
     else:
         plate = azure_ocr(link)
-#        link_ob = azure_object_detection(link, filename)
+        link_ob = azure_object_detection(link, filename)
         # 有車牌就輸出車牌
         if len(plate) > 0:
             output = "License Plate: {}".format(plate)
         # 沒有車牌就就輸出影像描述的結果
-#         else:
-#             output = azure_describe(link)
-#        link = link_ob
+        else:
+             output = azure_describe(link)
+        link = link_ob
         
         
 # 分別影像連結和偵測結果放到Flex Message
