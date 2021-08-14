@@ -129,7 +129,7 @@ def azure_object_detection(url, filename):
     draw = ImageDraw.Draw(img)
     font_size = int(5e-2 * img.size[1])
     fnt = ImageFont.truetype(
-      "static/TaipeiSansTCBeta-Regular.ttf", size=font_size)
+      "TaipeiSansTCBeta-Regular.ttf", size=font_size)
     object_detection = CV_CLIENT.detect_objects(url)
     if len(object_detection.objects) > 0:
         for obj in object_detection.objects:
