@@ -124,6 +124,40 @@ def azure_ocr(url):
     text = list(filter(r.match, text))
     return text[0].replace(".", "-") if len(text) > 0 else ""
 
+def azure_object_detection(url, filename):
+    img = Image.open(filename)
+    draw = ImageDraw.Draw(img)
+    font_size = int(5e-2 * img.size[1])
+    fnt = ImageFont.truetype(
+      "static/TaipeiSansTCBeta-Regular.ttf", size=font_size)
+    object_detection = CV_CLIENT.detect_objects(url)
+    if len(object_detection.objects) > 0:
+        for obj in object_detection.objects:
+            left = obj.rectangle.x
+            top = obj.rectangle.y
+            right = obj.rectangle.x + obj.rectangle.w
+            bot = obj.rectangle.y + obj.rectangle.h
+            name = obj.object_property
+            confidence = obj.confidence
+# 畫框並標上物件名稱與信心程度
+            draw.rectangle(
+              [left, top, right, bot], 
+              outline=(255, 0, 0), width=3)
+            draw.text(
+                [left, top + font_size],
+                "{} {}".format(name, confidence),
+                fill=(255, 0, 0),
+                font=fnt,
+            )
+# 把畫完的結果存檔，利用 imgur 把檔案轉成網路連結
+    img.save(filename)
+    image = IMGUR_CLIENT.image_upload(filename, "", "")
+    link = image["response"]["data"]["link"]
+# 最後刪掉圖檔
+    os.remove(filename)
+    return link
+
+
 @HANDLER.add(MessageEvent, message=ImageMessage)
 def handle_content_message(event):
     # 先把傳來的照片存檔
