@@ -20,6 +20,7 @@ from azure.cognitiveservices.vision.computervision import ComputerVisionClient
 from azure.cognitiveservices.vision.computervision.models import OperationStatusCodes,VisualFeatureTypes
 from imgur_python import Imgur
 from datetime import datetime, timezone, timedelta
+import re
 
 
 app = Flask(__name__)
