@@ -9,6 +9,23 @@ from linebot.models import (
     FlexSendMessage
 )
 import json
+import asyncio
+import io
+import glob
+import sys
+import time
+import uuid
+import requests
+from urllib.parse import urlparse
+from io import BytesIO
+from PIL import Image, ImageDraw, ImageFont
+from azure.cognitiveservices.vision.face import FaceClient
+from msrest.authentication import CognitiveServicesCredentials
+from azure.cognitiveservices.vision.face.models import TrainingStatusType, Person
+from azure.cognitiveservices.vision.computervision import ComputerVisionClient
+from azure.cognitiveservices.vision.computervision.models import OperationStatusCodes
+
+
 
 app = Flask(__name__)
 
