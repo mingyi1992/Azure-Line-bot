@@ -150,8 +150,8 @@ def handle_content_message(event):
         if len(plate) > 0:
             output = "License Plate: {}".format(plate)
         # 沒有車牌就就輸出影像描述的結果
-        else:
-            output = azure_describe(link)
+#         else:
+#             output = azure_describe(link)
 #        link = link_ob
         
         
